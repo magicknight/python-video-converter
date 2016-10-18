@@ -450,7 +450,7 @@ class FFMpeg(object):
             if not ret:
                 break
 
-            ret = ret.decode('utf-8')
+            ret = ret.decode(console_encoding, 'ignore')
             total_output += ret
             buf += ret
             if '\r' in buf:
