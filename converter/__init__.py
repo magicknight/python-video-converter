@@ -132,7 +132,7 @@ class Converter(object):
 
         return optlist
 
-    def convert(self, infile, outfile, options, twopass=False, timeout=10):
+    def convert(self, infile, outfile, options, other_options=None, twopass=False, timeout=10):
         """
         Convert media file (infile) according to specified options, and
         save it to outfile. For two-pass encoding, specify the pass (1 or 2)
@@ -173,6 +173,9 @@ class Converter(object):
 
         >>> for timecode in conv:
         ...   pass # can be used to inform the user about the progress
+
+        # modified at 11/16/2016 by Zhihua Liang: add other options, to present some options that mpeg support but cannot be set
+        in previous version.
         """
 
         if not isinstance(options, dict):
@@ -209,6 +212,7 @@ class Converter(object):
                 yield int(50.0 + (50.0 * timecode) / info.format.duration)
         else:
             optlist = self.parse_options(options, twopass)
+            optlist.extend(other_options)
             for timecode in self.ffmpeg.convert(infile, outfile, optlist,
                                                 timeout=timeout):
                 yield int((100.0 * timecode) / info.format.duration)
